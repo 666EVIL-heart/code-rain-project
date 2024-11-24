@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Rain</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: black;
+    }
+
+    #code-rain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      color: green;
+      font-family: monospace;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="code-rain"></div>
+  <script>
+    // 配置对象，用于自定义代码雨的字符
+    const config = {
+      // 在这里定义你想要显示的字符，可以是字符串形式罗列出来
+      rainChars: "杰儿是傻逼，杰儿是我儿，我儿是杰儿"
+    };
+
+    // 获取页面中的代码雨容器元素
+    const codeRain = document.getElementById('code-rain');
+
+    // 单个字符下落的类
+    class RainDrop {
+      constructor() {
+        // 从配置的字符中随机选取一个字符
+        this.char = config.rainChars[Math.floor(Math.random() * config.rainChars.length)];
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * -20;
+        this.speed = Math.random() * 5 + 2;
+      }
+
+      update() {
+        this.y += this.speed;
+        if (this.y > window.innerHeight) {
+          this.y = -20;
+          this.x = Math.random() * window.innerWidth;
+          this.char = config.rainChars[Math.floor(Math.random() * config.rainChars.length)];
+        }
+      }
+
+      draw() {
+        const span = document.createElement('span');
+        span.textContent = this.char;
+        span.style.position = 'absolute';
+        span.style.left = `${this.x}px`;
+        span.style.top = `${this.y}px`;
+        codeRain.appendChild(span);
+      }
+    }
+
+    const drops = [];
+    for (let i = 0; i < 100; i++) {
+      drops.push(new RainDrop());
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      codeRain.innerHTML = '';
+      drops.forEach(drop => {
+        drop.update();
+        drop.draw();
+      });
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>
